@@ -61,13 +61,14 @@ class mprofile:
           self.counts[s+'.mDA'][n] = m
     
     log.write("Parsing pileup file and writing to pileup.parsed.txt\n\n")
-    count_df = pd.DataFrame.from_dict(self.counts)
-    count_df.to_csv('pileup.parsed.txt',sep="\t", header=True, index=True)
+    if self.rm: 
+      count_df = pd.DataFrame.from_dict(self.counts)
+      count_df.to_csv('pileup.parsed.txt',sep="\t", header=True, index=True)
 
   def logit(self, metadata, covariate, outfile):
       log = self.log
       log.write("####Performing logistic regression for mutational analysis#####\n")
       cmd = 'Rscript {}/logit_mut_analysis.R {} {} {} {}'.format(self.matRdir, 'pileup.parsed.txt', metadata, covariate, outfile)
       print(cmd)
-      subprocess.call(cmd,shell=True)
+      if self.rm: subprocess.call(cmd,shell=True)
       log.write("\n\n")
