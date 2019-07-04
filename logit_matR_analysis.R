@@ -97,7 +97,7 @@ colnames(fit.s) <- c("logit_estimate", "pvalue")
 fit.s <- cbind(fit.s, p.adjust(fit.s[,'pvalue'], method="fdr"))
 colnames(fit.s) <- c("logit_estimate", "pvalue", "qvalue")
 
-write.table(fit.s, outfile, quote = F, sep="\t", row.names = T)
+write.table(fit.s, outfile, quote = F, sep="\t", row.names = T, col.names=NA )
 head(fit.s)
 
 fit.s <- data.frame(fit.s)

@@ -103,7 +103,7 @@ colnames(fit.s) <- c("logit_estimate", "pvalue", "qvalue")
 write.table(fit.s, outfile, quote = F, sep="\t", row.names = T)
 fit.sig <- fit.s[fit.s[,'qvalue']<0.1,]
 print(sprintf("%d significant mutational signatures identified.", dim(fit.sig)[[1]]))
-write.table(fit.sig[order(fit.sig[,'pvalue']),], file=gsub(".txt", ".sig.txt", outfile), quote = F, sep="\t", row.names = F)
+write.table(fit.sig[order(fit.sig[,'pvalue']),], file=gsub(".txt", ".sig.txt", outfile), quote = F, sep="\t", row.names = T, col.names=NA )
 
 dir.create("plots", showWarnings = FALSE)
 setwd('./plots')

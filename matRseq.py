@@ -46,12 +46,12 @@ if __name__ == "__main__":
   log= open("pipeline.txt", "wt")
   runner = process(metadata=meta, matRdir=matRdir, reffile=tRNAref, log=log, isPaired=args.paired, useRead=args.read, hasUMI=args.umi, aligner=args.aligner, runMode=args.runMode)
   print(matRdir, tRNAref, args.paired, args.read, args.umi, args.aligner, args.runMode)
-  runner.umi_extract()
-  runner.trim()
-  runner.merge()
-  runner.align()
-  runner.dedup()
-  runner.count()
+  #runner.umi_extract()
+  #runner.trim()
+  #runner.merge()
+  #runner.align()
+  #runner.dedup()
+  #runner.count()
 
   analysis_type = "univariate"
   dummy = args.formula.split('~')
@@ -65,8 +65,8 @@ if __name__ == "__main__":
     runner.logit(os.path.basename(args.metadata),args.formula,args.outfile)
 
   profiler = mprofile(metadata=meta, matRdir=matRdir, reffile=tRNAref, log=log, hasUMI=args.umi, runMode=args.runMode)
-  profiler.pileup()
-  profiler.mcount()
+  #profiler.pileup()
+  #profiler.mcount()
   if(args.formula.split('~')[0]==''):
     covariate = args.formula.split('~')[1]
   else:
