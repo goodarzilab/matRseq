@@ -9,6 +9,10 @@ logit.all<-function(x, design, model, n, feature.list){
     prep<-data.frame(design,m)
     fit<-glm(model, data=prep, family="binomial"(link="logit"), weights = m)
     sfit<<-summary(fit)
+    if(length(c(t(sfit$coefficients)))<8){
+      print(prep)
+      print(c(t(sfit$coefficients)))
+    }
     return(c(t(sfit$coefficients)))
   }
   logit.all.gene_try<-function(m){
@@ -23,8 +27,8 @@ logit.all<-function(x, design, model, n, feature.list){
     return(out)
   }
   logit.x<-t(apply(x, 1, logit.all.gene_try))
-  colnames(logit.x)<-apply(expand.grid(colnames(sfit$coefficients), rownames(sfit$coefficients)), 1, paste, collapse=".")
-  rownames(logit.x)<-feature.list
+  #colnames(logit.x)<-apply(expand.grid(colnames(sfit$coefficients), rownames(sfit$coefficients)), 1, paste, collapse=".")
+  #rownames(logit.x)<-feature.list
   return(logit.x)
 }
 
@@ -49,9 +53,10 @@ normalize.median.of.ratios <- function (m){
 args = commandArgs(trailingOnly=TRUE)
 countfile <- args[[1]]
 #countfile <- '/rasis/Projects/Tools/matRseq/data/pileup.parsed.txt'
+countfile <- '/home/hani/Downloads/withtab.txt'
 
-metadata <- args[[2]]
-#metadata <- '/rasis/Projects/Tools/matRseq/data/metadata.txt'
+#metadata <- args[[2]]
+metadata <- '/rasis/Projects/Tools/matRseq/data/metadata.txt'
 meta <- read_tsv(metadata)
 meta.rD <- meta
 meta.mD <- meta
@@ -66,6 +71,7 @@ setwd(indir)
 
 ## variable
 covariate <- args[[3]]
+covariate <- 'sample.type'
 
 outfile <- args[[4]]
 
@@ -79,9 +85,12 @@ design<-paste('status~',covariate)
 response <- 'status'
 set1 <- (meta$status == 'rDA')
 set2 <- (meta$status == 'mDA')
+levels <- unique(meta[[covariate]])
+set3 <- (meta[[covariate]] == levels[1])
+set4 <- (meta[[covariate]] == levels[2])
 tmp<-m
 tmp[tmp>0] <- 1
-f <- m[rowSums(tmp[,set1])>2 & rowSums(tmp[,set2])>2,]
+f <- m[rowSums(tmp[,set1])>2 & rowSums(tmp[,set2])>2 & rowSums(tmp[,set3])>2 & rowSums(tmp[,set4])>2,]
 print(sprintf("Count matrix was filtered down to %d rows (initially %d).", dim(f)[[1]], dim(m)[[1]]))
 
 ## Logit analysis
