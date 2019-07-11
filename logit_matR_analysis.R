@@ -79,7 +79,12 @@ sample.types <- unique(meta[[response]])
 print(sample.types)
 set1 <- (meta[[response]] == sample.types[[1]])
 set2 <- (meta[[response]] == sample.types[[2]])
-f <- m[rowSums(m[,set1])>1 & rowSums(m[,set2])>1,]
+levels <- unique(meta[[covariate]])
+set3 <- (meta[[covariate]] == levels[1])
+set4 <- (meta[[covariate]] == levels[2])
+tmp<-m
+tmp[tmp>0] <- 1
+f <- m[rowSums(tmp[,set1])>2 & rowSums(tmp[,set2])>2 & rowSums(tmp[,set3])>2 & rowSums(tmp[,set4])>2,]
 print(sprintf("Count matrix was filtered down to %d rows (initially %d).", dim(f)[[1]], dim(m)[[1]]))
 
 ## Logit analysis
