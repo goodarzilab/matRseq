@@ -43,7 +43,7 @@ covariate <- strsplit(design,'~')[[1]][[2]]
 meta[[covariate]] <- factor(meta[[covariate]])
 meta[[covariate]] <- relevel(meta[[covariate]], ref=ref)
 
-dds <- DESeqDataSetFromMatrix(countData = m, colData = meta, design = formula("~cell.line"))
+dds <- DESeqDataSetFromMatrix(countData = m, colData = meta, design = formula(design))
 dds <- DESeq(dds)
 res <- results(dds)
 
