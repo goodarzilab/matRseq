@@ -1,7 +1,9 @@
 #!/usr/bin/env Rscript
+if("tidyverse" %in% rownames(installed.packages()) == FALSE) {install.packages("tidyverse",repos = "http://cran.us.r-project.org")}
 suppressMessages(library(tidyverse))
 suppressMessages(library(DESeq2))
 suppressMessages(library(ggpubr))
+if("rstatix" %in% rownames(installed.packages()) == FALSE) {install.packages("rstatix",repos = "http://cran.us.r-project.org")}
 suppressMessages(library(rstatix))
 
 logit.all<-function(x, design, model, n, feature.list){
@@ -51,12 +53,11 @@ normalize.median.of.ratios <- function (m){
 }
 
 args = commandArgs(trailingOnly=TRUE)
-countfile <- args[[1]]
+ountfile <- args[[1]]
 #countfile <- '/rasis/Projects/Tools/matRseq/data/pileup.parsed.txt'
-countfile <- '/home/hani/Downloads/withtab.txt'
 
-#metadata <- args[[2]]
-metadata <- '/rasis/Projects/Tools/matRseq/data/metadata.txt'
+
+metadata <- args[[2]]
 meta <- read_tsv(metadata)
 meta.rD <- meta
 meta.mD <- meta
@@ -71,9 +72,10 @@ setwd(indir)
 
 ## variable
 covariate <- args[[3]]
-covariate <- 'sample.type'
+
 
 outfile <- args[[4]]
+
 
 ## Load the count table
 m <- read.table(countfile, sep="\t", head=T, row.names=1)
@@ -115,11 +117,10 @@ print(sprintf("%d significant mutational signatures identified.", dim(fit.sig)[[
 write.table(fit.sig[order(fit.sig[,'pvalue']),], file=gsub(".txt", ".sig.txt", outfile), quote = F, sep="\t", row.names = T, col.names=NA )
 
 dir.create("plots", showWarnings = FALSE)
-setwd('./plots')
+setwd('/plots')
 
 for (t in rownames(fit.sig)){
   meta$test <- df[t,]
   meta %>% ggplot(aes(x=status,y=test, color=!!as.symbol(covariate), fill=!!as.symbol(covariate)), size=1)+geom_boxplot(width=0.5, alpha=0.25)+geom_point(position = position_dodge(width=0.5))+
     theme_bw(30) +  theme(panel.background = element_rect(colour = "black",size=2), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +theme(text = element_text(size=12))
-  ggsave(gsub(".txt",paste0("_",t,".pdf"), outfile))
-}
+  ggsave(gsub(".txt",paste0("_",t,".pdf"), outfile), device = "pdf" )}

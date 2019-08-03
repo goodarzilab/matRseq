@@ -2,6 +2,7 @@
 suppressMessages(library(tidyverse))
 suppressMessages(library(DESeq2))
 suppressMessages(library(ggpubr))
+if("rstatix" %in% rownames(installed.packages()) == FALSE) {install.packages("rstatix",repos = "http://cran.us.r-project.org")}
 suppressMessages(library(rstatix))
 
 args = commandArgs(trailingOnly=TRUE)
@@ -43,7 +44,7 @@ covariate <- strsplit(design,'~')[[1]][[2]]
 meta[[covariate]] <- factor(meta[[covariate]])
 meta[[covariate]] <- relevel(meta[[covariate]], ref=ref)
 
-dds <- DESeqDataSetFromMatrix(countData = m, colData = meta, design = formula(design))
+dds <- DESeqDataSetFromMatrix(countData = m, colData = meta, design = formula("~cell.line"))
 dds <- DESeq(dds)
 res <- results(dds)
 
@@ -61,7 +62,7 @@ g <- ggplot(data=as.data.frame(fit.s), aes(x=log2FoldChange, y=-log(pvalue), col
   scale_colour_manual(values=c("#11008f", "#FF9100", "FF0000"))+theme_bw(30) +
   theme(panel.background = element_rect(colour = "black",size=2), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   theme(legend.position="none") +
-  theme(text = element_text(size=12))  
+  theme(text = element_text(size=12))
   #xlim(c(-5, 5)) + ylim(c(0, 50))
 ggsave(gsub(".txt","_volvano.pdf", outfile), width=6, height=7)
 

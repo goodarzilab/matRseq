@@ -106,7 +106,7 @@ class process:
         elif (self.paired and self.read=="R2"):
             for sample in meta.index:
                 r2 = meta.loc[sample, 'R2']
-                cmd = 'zcat {} | fastx_reverse_complement -z -i - -o {}.post.fastq.gz'.format(r2,sample)
+                cmd = 'gzcat {} | fastx_reverse_complement -z -i - -o {}.post.fastq.gz'.format(r2,sample)
                 print(cmd)
                 log.write("%s\n" % (cmd))
                 if self.rm: subprocess.call(cmd,shell=True)
@@ -137,7 +137,7 @@ class process:
         meta = self.metadata
         log = self.log
         for sample in meta.index:
-            cmd = 'umi_tools dedup -I {}.srt.bam --output-stats=deduplicated -S {}.dd.bam'.format(sample,sample)
+            cmd = 'umi_tools dedup -I {}.srt.bam --output-stats=deduplicated -S {}.dd.bam'.format(sample,sample)   # sample : SW480_LVM2_ribo_r2.srt.bam
             print(cmd)
             log.write("%s\n" % (cmd))
             if self.rm: subprocess.call(cmd,shell=True)
@@ -155,7 +155,42 @@ class process:
             log.write("%s\n" % (cmd))
             if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
-    
+
+    def make_sam(self):
+        meta = self.metadata
+        log = self.log
+        for sample in meta.index:
+            if (self.umi):
+                cmd = 'samtools  view -h -o %s.sam %s.dd.bam' %(sample,sample)
+            else:
+                cmd = 'samtools  view -h -o %s.sam %s.srt.bam' %(sample,sample)
+            print(cmd)
+            log.write("%s\n" % (cmd))
+            subprocess.call(cmd,shell=True)
+        log.write("\n\n")
+
+    def make_mut_profile(self):
+        log = self.log
+        log.write("####Making mutation profiles from sam files#####\n")
+        cmd = 'for f in *.sam\n' + 'do\n' + 'out=${f/.sam/.tRNAcnt}\n'+ 'python3 ext_mut_profile.py < $f > $out\n' + 'done'
+        subprocess.call(cmd,shell=True)
+        log.write("\n\n")
+
+    def count_file(self):
+        log = self.log
+        log.write("####Performing univariate analysis using DESeq2#####\n")
+        cmd = "python3 Lcount.py"
+        subprocess.call(cmd,shell=True)
+        log.write("\n\n")
+
+    def logit(self, metadata, covariate, outfile):
+      log = self.log
+      log.write("####Performing logistic regression for mutational analysis#####\n")
+      cmd = 'Rscript {}/logit_mut_analysis.R {} {} {} {}'.format(self.matRdir, 'countfile.txt', metadata, covariate, outfile)
+      print(cmd)
+      if self.rm: subprocess.call(cmd,shell=True)
+      log.write("\n\n")
+
     def univariate(self, metadata, design, ref, outfile):
         log = self.log
         log.write("####Performing univariate analysis using DESeq2#####\n")

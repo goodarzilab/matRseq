@@ -2,6 +2,7 @@
 suppressMessages(library(tidyverse))
 suppressMessages(library(DESeq2))
 suppressMessages(library(ggpubr))
+if("rstatix" %in% rownames(installed.packages()) == FALSE) {install.packages("rstatix",repos = "http://cran.us.r-project.org")}
 suppressMessages(library(rstatix))
 
 logit.all<-function(x, design, model, n, feature.list){
@@ -79,12 +80,7 @@ sample.types <- unique(meta[[response]])
 print(sample.types)
 set1 <- (meta[[response]] == sample.types[[1]])
 set2 <- (meta[[response]] == sample.types[[2]])
-levels <- unique(meta[[covariate]])
-set3 <- (meta[[covariate]] == levels[1])
-set4 <- (meta[[covariate]] == levels[2])
-tmp<-m
-tmp[tmp>0] <- 1
-f <- m[rowSums(tmp[,set1])>2 & rowSums(tmp[,set2])>2 & rowSums(tmp[,set3])>2 & rowSums(tmp[,set4])>2,]
+f <- m[rowSums(m[,set1])>1 & rowSums(m[,set2])>1,]
 print(sprintf("Count matrix was filtered down to %d rows (initially %d).", dim(f)[[1]], dim(m)[[1]]))
 
 ## Logit analysis
@@ -102,7 +98,7 @@ colnames(fit.s) <- c("logit_estimate", "pvalue")
 fit.s <- cbind(fit.s, p.adjust(fit.s[,'pvalue'], method="fdr"))
 colnames(fit.s) <- c("logit_estimate", "pvalue", "qvalue")
 
-write.table(fit.s, outfile, quote = F, sep="\t", row.names = T, col.names=NA )
+write.table(fit.s, outfile, quote = F, sep="\t", row.names = F)
 head(fit.s)
 
 fit.s <- data.frame(fit.s)
@@ -114,7 +110,7 @@ g <- ggplot(data=as.data.frame(fit.s), aes(x=logit_estimate, y=-log(pvalue), col
   scale_colour_manual(values=c("#11008f", "#FF9100", "FF0000"))+theme_bw(30) +
   theme(panel.background = element_rect(colour = "black",size=2), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   theme(legend.position="none") +
-  theme(text = element_text(size=12)) + 
+  theme(text = element_text(size=12)) +
   xlim(c(-5, 5)) + ylim(c(0, 50))
 ggsave(gsub(".txt","_volvano.pdf", outfile), width=6, height=7)
 

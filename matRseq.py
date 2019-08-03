@@ -10,7 +10,7 @@ import argparse
 import pandas as pd
 import numpy as np
 from process import process
-from mprofile import mprofile
+
 
 #python run_ribosomal_tRNA_matR.py --useR2 ./data/metadata.txt sample.type~cell.line SW480-Par tRNA_LvM2-v-Par.txt
 if __name__ == "__main__":
@@ -30,28 +30,32 @@ if __name__ == "__main__":
   parser.set_defaults(species="human", read="R2", aligner="BWA", paired=True, umi=True, runMode=True)
   args = parser.parse_args()
 
-  matRdir='../'
+  matRdir='./'
   if ('matRdir' in os.environ):
     matRdir = os.getcwd()
 
   tRNAref = "{}/tRNAs/human/human_mature_tRNA_ref_reduced.fa".format(matRdir)
   if (args.species=="mouse"):
     tRNAref = "{}/tRNAs/mouse/mouse_mature_tRNA_ref_reduced.fa"
-
   meta = pd.read_csv(args.metadata, sep="\t", header=0, index_col=0)
   print(meta)
-  indir = os.path.dirname(args.metadata)
+  met = os.path.abspath(args.metadata)
+  indir = os.path.dirname(met)
   os.chdir(indir)
-  
-  log= open("pipeline.txt", "wt")
+
+  log= open("pipeline.txt", "w+")
   runner = process(metadata=meta, matRdir=matRdir, reffile=tRNAref, log=log, isPaired=args.paired, useRead=args.read, hasUMI=args.umi, aligner=args.aligner, runMode=args.runMode)
   print(matRdir, tRNAref, args.paired, args.read, args.umi, args.aligner, args.runMode)
-  #runner.umi_extract()
-  #runner.trim()
-  #runner.merge()
-  #runner.align()
-  #runner.dedup()
-  #runner.count()
+  runner.umi_extract()
+  runner.trim()
+  runner.merge()
+  runner.align()
+  runner.dedup()
+  runner.count()
+  runner.make_sam()
+  runner.make_mut_profile()
+  runner.count_file()
+
 
   analysis_type = "univariate"
   dummy = args.formula.split('~')
@@ -64,14 +68,12 @@ if __name__ == "__main__":
   elif (analysis_type == "logit"):
     runner.logit(os.path.basename(args.metadata),args.formula,args.outfile)
 
-  profiler = mprofile(metadata=meta, matRdir=matRdir, reffile=tRNAref, log=log, hasUMI=args.umi, runMode=args.runMode)
-  #profiler.pileup()
-  #profiler.mcount()
+
+
+
   if(args.formula.split('~')[0]==''):
     covariate = args.formula.split('~')[1]
   else:
     covariate = args.formula.split('~')[0]
-  profiler.logit(os.path.basename(args.metadata),covariate,re.sub('.txt', '.mprofile.txt',args.outfile))
+  runner.logit(os.path.basename(args.metadata),covariate,re.sub('.txt', '.mprofile.txt',args.outfile))
   log.close()
-
-
