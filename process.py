@@ -166,24 +166,24 @@ class process:
                 cmd = 'samtools  view -h -o %s.sam %s.srt.bam' %(sample,sample)
             print(cmd)
             log.write("%s\n" % (cmd))
-            subprocess.call(cmd,shell=True)
+            if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
 
     def make_mut_profile(self):
         log = self.log
         log.write("####Making mutation profiles from sam files#####\n")
         cmd = 'for f in *.sam\n' + 'do\n' + 'out=${f/.sam/.tRNAcnt}\n'+ 'python3 ext_mut_profile.py < $f > $out\n' + 'done'
-        subprocess.call(cmd,shell=True)
+        if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
 
     def count_file(self):
         log = self.log
-        log.write("####Performing univariate analysis using DESeq2#####\n")
+        log.write("####generating the count matrix using Lcount.py#####\n")
         cmd = "python3 Lcount.py"
-        subprocess.call(cmd,shell=True)
+        if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
 
-    def logit_mut(self, metadata, covariate, outfile):
+    def logit(self, metadata, covariate, outfile):
       log = self.log
       log.write("####Performing logistic regression for mutational analysis#####\n")
       cmd = 'Rscript {}/logit_mut_analysis.R {} {} {} {}'.format(self.matRdir, 'countfile.txt', metadata, covariate, outfile)

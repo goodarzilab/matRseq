@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from process import process
 
+
 #python run_ribosomal_tRNA_matR.py --useR2 ./data/metadata.txt sample.type~cell.line SW480-Par tRNA_LvM2-v-Par.txt
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -41,7 +42,7 @@ if __name__ == "__main__":
   met = os.path.abspath(args.metadata)
   indir = os.path.dirname(met)
   os.chdir(indir)
-  
+
   log= open("pipeline.txt", "w+")
   runner = process(metadata=meta, matRdir=matRdir, reffile=tRNAref, log=log, isPaired=args.paired, useRead=args.read, hasUMI=args.umi, aligner=args.aligner, runMode=args.runMode)
   print(matRdir, tRNAref, args.paired, args.read, args.umi, args.aligner, args.runMode)
@@ -74,7 +75,5 @@ if __name__ == "__main__":
     covariate = args.formula.split('~')[1]
   else:
     covariate = args.formula.split('~')[0]
-  runner.logit_mut(os.path.basename(args.metadata),covariate,re.sub('.txt', '.mprofile.txt',args.outfile))
+  runner.logit(os.path.basename(args.metadata),covariate,re.sub('.txt', '.mprofile.txt',args.outfile))
   log.close()
-
-
