@@ -106,7 +106,7 @@ class process:
         elif (self.paired and self.read=="R2"):
             for sample in meta.index:
                 r2 = meta.loc[sample, 'R2']
-                cmd = 'gzcat {} | fastx_reverse_complement -z -i - -o {}.post.fastq.gz'.format(r2,sample)
+                cmd = 'zcat {} | fastx_reverse_complement -z -i - -o {}.post.fastq.gz'.format(r2,sample)
                 print(cmd)
                 log.write("%s\n" % (cmd))
                 if self.rm: subprocess.call(cmd,shell=True)
