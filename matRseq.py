@@ -10,7 +10,6 @@ import argparse
 import pandas as pd
 import numpy as np
 from process import process
-from mprofile import mprofile
 
 #python run_ribosomal_tRNA_matR.py --useR2 ./data/metadata.txt sample.type~cell.line SW480-Par tRNA_LvM2-v-Par.txt
 if __name__ == "__main__":
