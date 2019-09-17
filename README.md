@@ -26,7 +26,7 @@ For bi-variate analysis the following command will run the analysis:
 ```bash
 python matRseq.py --runMode metadata.txt 'sample.type~cell.line'  tRNA_LvM2-v-Par.txt
 ```
-and for uni-variate analysis the following command will run the analysis:
+and for uni-variate analysis the following command will run the analysis(reference must be specified):
 ```bash
 python matRseq.py --runMode --ref=SW480Par metadata_univariate.txt '~cell.line'  tRNA_LvM2-v-Par.txt
 ```
