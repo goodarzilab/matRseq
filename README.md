@@ -22,11 +22,11 @@ SW480_P_total_r2 | SW480_P_total_7_S10 | SW480_P_total_7_S10_R1_001.fastq.gz | S
 ##### human mature tRNA reference included in the package
 
 #### Run the analysis
-For bi-variate analysis the following command will then run the analysis:
+For bi-variate analysis the following command will run the analysis:
 ```bash
 python matRseq.py --runMode metadata.txt 'sample.type~cell.line'  tRNA_LvM2-v-Par.txt
 ```
-and for uni-variate analysis the following command will then run the analysis:
+and for uni-variate analysis the following command will run the analysis:
 ```bash
 python matRseq.py --runMode --ref=SW480Par metadata_univariate.txt '~cell.line'  tRNA_LvM2-v-Par.txt
 ```
