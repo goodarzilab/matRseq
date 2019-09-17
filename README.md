@@ -34,9 +34,9 @@ python matRseq.py --runMode --ref=SW480Par metadata_univariate.txt '~cell.line' 
 #### Options
 Run `python matRseq.py` for usage.
 The following are the options:
-1. `--runMode` or `-r` vs. `--printMode` or `-p` : `--printMode` prints all the commands that are run
+1. `--runMode` or `-r` vs `--printMode` or `-p` : `--printMode` prints all the commands that are run
 2. `-a` or `--aligner`: Choose aligner package (default is BWA)
 3. `-l` or `--read` : R1, R2, both; Use both R1 and R2 (miSeq) as opposed to R2 (10X). Default is R2
-4. `--hasUMI` or `--noUMI`: Whether reads contain UMI or not (Default is hasUMI)
-5. `--paired` or `--single` : if the reads are paired end. (Default is paired)
+4. `--hasUMI` vs `--noUMI`: Whether reads contain UMI or not (Default is hasUMI)
+5. `--paired` vs `--single` : if the reads are paired end. (Default is paired)
 6. `--ref`: The sample that is the reference in univariate analysis.
