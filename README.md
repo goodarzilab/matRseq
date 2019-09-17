@@ -13,7 +13,7 @@ The metadata file resides in the working directory and lists the required inform
 For example:
 
 | Sample.name  | Sample.prefix  | R1  | R2  | sample.type | cell.line | sample.rep |
-|---|---|---|---|---|
+|---|---|---|---|---|---|---|
 SW480_LVM2_ribo_r1 | SW480_LVM2_ribo_6_S15 | SW480_LVM2_ribo_6_S15_R1_001.fastq.gz | SW480_LVM2_ribo_6_S15_R2_001.fastq.gz | ribo |	SW480-Par |	1 |
 SW480_LVM2_ribo_r2 | SW480_LVM2_ribo_7_S16 | SW480_LVM2_ribo_7_S16_R1_001.fastq.gz | SW480_LVM2_ribo_7_S16_R2_001.fastq.gz | ribo | SW480-Par | 2 | 
 SW480_P_total_r1 | SW480_P_total_6_S9 | SW480_P_total_6_S9_R1_001.fastq.gz | SW480_P_total_6_S9_R2_001.fastq.gz	total |	SW480-LvM2 | 1 |
