@@ -75,5 +75,5 @@ if __name__ == "__main__":
     covariate = args.formula.split('~')[1]
   else:
     covariate = args.formula.split('~')[0]
-  runner.logit(os.path.basename(args.metadata),covariate,re.sub('.txt', '.mprofile.txt',args.outfile))
+  runner.mlogit(os.path.basename(args.metadata),covariate,re.sub('.txt', '.mprofile.txt',args.outfile))
   log.close()
