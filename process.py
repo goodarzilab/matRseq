@@ -183,7 +183,7 @@ class process:
         if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
 
-    def logit(self, metadata, covariate, outfile):
+    def mlogit(self, metadata, covariate, outfile):
       log = self.log
       log.write("####Performing logistic regression for mutational analysis#####\n")
       cmd = 'Rscript {}/logit_mut_analysis.R {} {} {} {}'.format(self.matRdir, 'countfile.txt', metadata, covariate, outfile)
@@ -196,7 +196,7 @@ class process:
         log.write("####Performing univariate analysis using DESeq2#####\n")
         cmd = 'Rscript {}/univariate_matR_analysis.R {} {} {} {}'.format(self.matRdir, metadata, design, ref, outfile)
         print(cmd)
-        subprocess.call(cmd,shell=True)
+        if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
 
     def logit(self, metadata, design, outfile):
@@ -204,5 +204,5 @@ class process:
         log.write("####Performing logistic regression for logit analysis#####\n")
         cmd = 'Rscript {}/logit_matR_analysis.R {} {} {}'.format(self.matRdir, metadata, design, outfile)
         print(cmd)
-        subprocess.call(cmd,shell=True)
+        if self.rm: subprocess.call(cmd,shell=True)
         log.write("\n\n")
