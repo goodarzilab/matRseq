@@ -32,7 +32,10 @@ if __name__ == "__main__":
 
   matRdir='./'
   if ('matRdir' in os.environ):
-    matRdir = os.getcwd()
+    matRdir = os.environ['matRdir']
+  else:
+    print('matRdir is not set. Please uese `export matRdir=<dir>` to set the directory path for matRdir.')
+    exit(1)
 
   tRNAref = "{}/tRNAs/human/human_mature_tRNA_ref_reduced.fa".format(matRdir)
   if (args.species=="mouse"):
