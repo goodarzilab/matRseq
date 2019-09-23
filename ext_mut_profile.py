@@ -69,13 +69,17 @@ class Mut_Profile():
                 mutation = data[12].split(':')[2]
                 self.mut(gene_name, read, start_index, mutation)
 
-    def export(self):
+    def export(self, outfile=False):
+        if (not outfile):
+            out=sys.stdout
         for gene in self.genes:
-            print(gene, "\t", self.genes[gene]["count"])
+            #print(gene, "\t", self.genes[gene]["count"])
+            out.write(gene, "\t", self.genes[gene]["count"], "\n")
             for index in self.genes[gene]["miss_matched"]:
                 if self.genes[gene]["miss_matched"][index]["count"] ==0:
                     continue
-                print(index,"\t", self.genes[gene]["miss_matched"][index])  #{('G', '-'): [1, 0.5, 0.1111111111111111], 'count': 2, ('G', 'C'): [1, 0.5, 0.1111111111111111]}
+                #print(index,"\t", self.genes[gene]["miss_matched"][index])  #{('G', '-'): [1, 0.5, 0.1111111111111111], 'count': 2, ('G', 'C'): [1, 0.5, 0.1111111111111111]}
+                out.write(index,"\t", self.genes[gene]["miss_matched"][index], "\n")  #{('G', '-'): [1, 0.5, 0.1111111111111111], 'count': 2, ('G', 'C'): [1, 0.5, 0.1111111111111111]}
 
 def main():
     MutP = Mut_Profile()

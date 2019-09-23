@@ -71,9 +71,6 @@ if __name__ == "__main__":
   elif (analysis_type == "logit"):
     runner.logit(os.path.basename(args.metadata),args.formula,args.outfile)
 
-
-
-
   if(args.formula.split('~')[0]==''):
     covariate = args.formula.split('~')[1]
   else:

@@ -1,6 +1,8 @@
 import subprocess
 import re
 import os
+from ext_mut_profile import Mut_Profile
+from Lcount import merger
 
 #overall structure
 #NNNN (umi1) ACTGGATAC TGGN (tRNA) GTATCCAGT NNNN (umi2)
@@ -170,17 +172,27 @@ class process:
         log.write("\n\n")
 
     def make_mut_profile(self):
+        meta = self.metadata
         log = self.log
         log.write("####Making mutation profiles from sam files#####\n")
-        cmd = 'for f in *.sam\n' + 'do\n' + 'out=${f/.sam/.tRNAcnt}\n'+ 'python3 ext_mut_profile.py < $f > $out\n' + 'done'
-        if self.rm: subprocess.call(cmd,shell=True)
+        #cmd = 'for f in *.sam\n' + 'do\n' + 'out=${f/.sam/.tRNAcnt}\n'+ 'python3 ext_mut_profile.py < $f > $out\n' + 'done'
+        #if self.rm: subprocess.call(cmd,shell=True)
+        for sample in meta.index:
+            MutP = Mut_Profile()
+            MutP.read_from_file(open('%s.sam'%(sample), "rt"))
+            MutP.export(open('%s.tRNAcnt'%(sample), "wt"))
         log.write("\n\n")
 
     def count_file(self):
+        meta = self.metadata
         log = self.log
         log.write("####generating the count matrix using Lcount.py#####\n")
-        cmd = "python3 Lcount.py"
-        if self.rm: subprocess.call(cmd,shell=True)
+        my_merger = merger()
+        cntfiles = [str(x)+".tRNAcnt" for x in meta.index]
+        for f in cntfiles:
+            my_merger.make_mutation_tables(f)
+        my_merger.make_H_file()
+        my_merger.export_mutations_table()
         log.write("\n\n")
 
     def mlogit(self, metadata, covariate, outfile):

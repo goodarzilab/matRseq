@@ -71,10 +71,10 @@ class merger():
                     self.counts[samp+'.mDA'][g] = "0"
 
 
-    def export_mutations_table(self):
+    def export_mutations_table(self, outfile="countfile.txt"):
 
         count_df = pd.DataFrame.from_dict(self.counts)
-        count_df.to_csv('countfile.txt',sep="\t", header=True, index=True)
+        count_df.to_csv(outfile,sep="\t", header=True, index=True)
 
 
 def main():
