@@ -21,7 +21,7 @@ class merger():
             self.muts[sample] = {}
         if not (gene in self.muts[sample]):
             self.muts[sample][gene]={"Count": 0, "Pos":{}}
-        ttcnt = totalcnt.strip()
+        ttcnt = totalcnt
         pos = pos.strip()
         self.muts[sample][gene]["Count"] = ttcnt
         self.muts[sample][gene]["Pos"][pos] = cnt
@@ -30,8 +30,8 @@ class merger():
         with open (file, "r") as myfile:
             dat = myfile.readlines()[1:]
         current_gene = ""
-        cnt = 0
-        for i in range(len(dat)):
+        cnt,totalcnt = 0,0
+        for i in range(1,len(dat)):
             data = dat[i].strip().split('\t')
             pos = data[0]
             dicti = data[1]
