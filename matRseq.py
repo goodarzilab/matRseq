@@ -49,7 +49,6 @@ if __name__ == "__main__":
   log= open("pipeline.txt", "w+")
   runner = process(metadata=meta, matRdir=matRdir, reffile=tRNAref, log=log, isPaired=args.paired, useRead=args.read, hasUMI=args.umi, aligner=args.aligner, runMode=args.runMode)
   print(matRdir, tRNAref, args.paired, args.read, args.umi, args.aligner, args.runMode)
-  runner.rm=False
   runner.umi_extract()
   runner.trim()
   runner.merge()
@@ -57,10 +56,8 @@ if __name__ == "__main__":
   runner.dedup()
   runner.count()
   runner.make_sam()
-  runner.rm=True
   runner.make_mut_profile()
   runner.count_file()
-
 
   analysis_type = "univariate"
   dummy = args.formula.split('~')

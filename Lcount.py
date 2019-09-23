@@ -31,16 +31,16 @@ class merger():
             dat = myfile.readlines()
         current_gene = ""
         cnt,totalcnt = 0,0
-        for i in range(1,len(dat)):
+        for i in range(0,len(dat)):
             data = dat[i].strip().split('\t')
             pos = data[0]
             dicti = data[1]
 
-            if(data[0][0] == 't'):
+            if(data[0].startswith('tRNA') or data[0].startswith('m')):
                 current_gene = data[0].strip()
                 totalcnt = data[1]
             else:
-                cnt = literal_eval(dicti[1:])["count"]
+                cnt = literal_eval(dicti)["count"]
                 self.add_gene(current_gene,pos)
                 self.add_muts(current_gene, file, pos, cnt, totalcnt)
 

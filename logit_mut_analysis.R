@@ -53,7 +53,7 @@ normalize.median.of.ratios <- function (m){
 }
 
 args = commandArgs(trailingOnly=TRUE)
-ountfile <- args[[1]]
+countfile <- args[[1]]
 #countfile <- '/rasis/Projects/Tools/matRseq/data/pileup.parsed.txt'
 
 
@@ -117,7 +117,7 @@ print(sprintf("%d significant mutational signatures identified.", dim(fit.sig)[[
 write.table(fit.sig[order(fit.sig[,'pvalue']),], file=gsub(".txt", ".sig.txt", outfile), quote = F, sep="\t", row.names = T, col.names=NA )
 
 dir.create("plots", showWarnings = FALSE)
-setwd('/plots')
+setwd('plots')
 
 for (t in rownames(fit.sig)){
   meta$test <- df[t,]
