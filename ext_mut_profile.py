@@ -60,7 +60,7 @@ class Mut_Profile():
         file = file
         for line in file:
             data = line.strip().split('\t')
-            if len(data) == 3:
+            if data[0].startswith('@SQ'):
                 self.add_gene(data[1].split(':')[1])
             elif '@' not in data[0] and data[2] != '*':
                 gene_name = data[2]
@@ -69,17 +69,16 @@ class Mut_Profile():
                 mutation = data[12].split(':')[2]
                 self.mut(gene_name, read, start_index, mutation)
 
-    def export(self, outfile=False):
-        if (not outfile):
+    def export(self, out=False):
+        if (not out):
             out=sys.stdout
         for gene in self.genes:
-            #print(gene, "\t", self.genes[gene]["count"])
-            out.write(gene, "\t", self.genes[gene]["count"], "\n")
+            out.write(gene+"\t"+str(self.genes[gene]["count"])+"\n")
             for index in self.genes[gene]["miss_matched"]:
                 if self.genes[gene]["miss_matched"][index]["count"] ==0:
                     continue
                 #print(index,"\t", self.genes[gene]["miss_matched"][index])  #{('G', '-'): [1, 0.5, 0.1111111111111111], 'count': 2, ('G', 'C'): [1, 0.5, 0.1111111111111111]}
-                out.write(index,"\t", self.genes[gene]["miss_matched"][index], "\n")  #{('G', '-'): [1, 0.5, 0.1111111111111111], 'count': 2, ('G', 'C'): [1, 0.5, 0.1111111111111111]}
+                out.write(str(index)+"\t"+str(self.genes[gene]["miss_matched"][index])+"\n")  #{('G', '-'): [1, 0.5, 0.1111111111111111], 'count': 2, ('G', 'C'): [1, 0.5, 0.1111111111111111]}
 
 def main():
     MutP = Mut_Profile()

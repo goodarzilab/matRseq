@@ -28,7 +28,7 @@ class merger():
 
     def make_mutation_tables(self,file):
         with open (file, "r") as myfile:
-            dat = myfile.readlines()[1:]
+            dat = myfile.readlines()
         current_gene = ""
         cnt,totalcnt = 0,0
         for i in range(1,len(dat)):
